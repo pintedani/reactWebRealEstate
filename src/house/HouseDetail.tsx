@@ -1,8 +1,9 @@
 import ApiStatus from "../ApiStatus";
-import { useFetchHouse } from "../hooks/HouseHooks";
+import { useFetchHouse,useDeleteHouse } from "../hooks/HouseHooks";
 import { currencyFormatter } from "../config";
 import { Link, useParams } from "react-router-dom";
 import defaultImage from "./defaultPhoto";
+import Bids from "../bids/Bids";
 
 const HouseDetail = () => {
     const { id } = useParams();
@@ -10,6 +11,7 @@ const HouseDetail = () => {
     const houseId = parseInt(id);
   
     const { data, status, isSuccess } = useFetchHouse(houseId);
+    const deleteHouseMutation = useDeleteHouse();
   
     if (!isSuccess) return <ApiStatus status={status} />;
   
@@ -35,12 +37,16 @@ const HouseDetail = () => {
                 </Link>
               </div>
               <div className="col-2">
-                <button
-                  className="btn btn-danger w-100"            
-                >
-                  Delete
-                </button>
-              </div>
+            <button
+              className="btn btn-danger w-100"
+              onClick={() => {
+                if (window.confirm("Are you sure?"))
+                  deleteHouseMutation.mutate(data);
+              }}
+            >
+              Delete
+            </button>
+          </div>
             </div>
           </div>
           <div className="col-6">
@@ -58,6 +64,7 @@ const HouseDetail = () => {
             <div className="row">
               <div className="col-12 mt-3">{data.description}</div>
             </div>
+            <Bids house={data}/>
           </div>
         </div>
       );

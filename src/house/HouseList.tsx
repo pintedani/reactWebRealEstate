@@ -1,7 +1,7 @@
 import ApiStatus from "../ApiStatus";
 import { currencyFormatter } from "../config";
 import useFetchHouses from "../hooks/HouseHooks";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HouseList = () => {
     const nav = useNavigate();
@@ -27,7 +27,7 @@ const HouseList = () => {
             </thead>
             <tbody>
               {data && data.map((h) => (
-                  <tr key={h.id} onClick={()=>nav('/house/${h.Id}')}>
+                  <tr key={h.id} onClick={()=>nav(`/house/${h.id}`)}>
                     <td>{h.address}</td>
                     <td>{h.country}</td>
                     <td>{currencyFormatter.format(h.price)}</td>
@@ -35,6 +35,9 @@ const HouseList = () => {
                 ))}
             </tbody>
           </table>
+          <Link className= "btn btn-primary" to="/house/add">
+            Add
+          </Link>
         </div>
       );
 }
